@@ -1,5 +1,6 @@
 if __name__ == '__main__':
     from ultralytics import YOLO
+    from ultralytics.utils.metrics import compute_ap
 
     #model = YOLO('yolov8s.pt')  # pretrained model
     model = YOLO('best.pt')  # custom trained model
@@ -27,7 +28,13 @@ if __name__ == '__main__':
     print("FP: ", fp[0])
     print("FN: ", fn[0])
 
-    print("Precision: ", tp[0]/(tp[0]+fp[0]))
-    print("Recall: ", tp[0]/(tp[0]+fn[0]))
+    precision = tp[0]/(tp[0]+fp[0])
+    recall = tp[0]/(tp[0]+fn[0])
+
+    print("Precision: ", precision)
+    print("Recall: ", recall)
     
+    ap, mpre, mrec = compute_ap([recall], [precision])
+    print("AP:", ap)
+
     #results = model.track(source='C:\\path\\to\\video\\vol.mov', persist=True, save=True, tracker="botsort.yaml", device='cuda')
